@@ -119,7 +119,7 @@ func NewCycle() (Cycle, error) {
 
 // RecapCurrentCycle launches a set of questions that aim to
 // recap a current Cycle
-func (c Cycle) RecapCurrentCycle(f *os.File) error {
+func (c Cycle) RecapCurrentCycle() error {
 	var r Recap
 	var err error
 
@@ -151,7 +151,7 @@ func (c Cycle) RecapCurrentCycle(f *os.File) error {
 		c.Recap = r
 	}
 
-	err = c.CycleToCSV(f)
+	err = c.CycleToCSV()
 	if err != nil {
 		return err
 	}
@@ -180,7 +180,7 @@ func (c Cycle) launchRecap() {
 
 // CycleToCSV converts a Cycle to []string
 // to write to CSV
-func (c Cycle) CycleToCSV(f *os.File) error {
+func (c Cycle) CycleToCSV() error {
 
 	data := []string{
 		c.CycleGoal,
@@ -201,7 +201,7 @@ func (c Cycle) CycleToCSV(f *os.File) error {
 		c.Recap.Improvements,
 	}
 
-	err := storage.Insert(f, data)
+	err := storage.Insert(data)
 	if err != nil {
 		return err
 	}
