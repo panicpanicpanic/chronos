@@ -4,7 +4,10 @@ package cycle
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"time"
+
+	"github.com/panicpanicpanic/chronos/storage"
 )
 
 // Cycle contains details about a Cycle of work
@@ -116,7 +119,7 @@ func NewCycle() (Cycle, error) {
 
 // RecapCurrentCycle launches a set of questions that aim to
 // recap a current Cycle
-func (c Cycle) RecapCurrentCycle() error {
+func (c Cycle) RecapCurrentCycle(f *os.File) error {
 	var r Recap
 	var err error
 
@@ -146,10 +149,11 @@ func (c Cycle) RecapCurrentCycle() error {
 		}
 
 		c.Recap = r
-	} else {
-		fmt.Println("Writing cycle to CSV")
-		fmt.Println("Okay...going to leave now!")
-		os.Exit(1)
+	}
+
+	err = c.CycleToCSV(f)
+	if err != nil {
+		return err
 	}
 
 	return nil
@@ -172,4 +176,34 @@ func (c Cycle) launchRecap() {
 	fmt.Println("Awesome! Here's a breakdown of this cycle:")
 	fmt.Printf("Goal: %s \n", c.CycleGoal)
 	fmt.Printf("Starting Point: %s \n", c.StartingPoint)
+}
+
+// CycleToCSV converts a Cycle to []string
+// to write to CSV
+func (c Cycle) CycleToCSV(f *os.File) error {
+
+	data := []string{
+		c.CycleGoal,
+		c.CycleTitle,
+		c.StartingPoint,
+		c.Hazards,
+		c.Energy,
+		c.Morale,
+		c.Duration.String(),
+		c.StartTime.String(),
+		c.EndTime.String(),
+		strconv.FormatBool(c.Active),
+		c.Project.Description,
+		c.Project.JiraTicket,
+		c.Project.GithubPR,
+		strconv.FormatBool(c.Recap.CycleCompleted),
+		c.Recap.Distractions,
+		c.Recap.Improvements,
+	}
+
+	err := storage.Insert(f, data)
+	if err != nil {
+		return err
+	}
+	return nil
 }

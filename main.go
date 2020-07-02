@@ -6,10 +6,18 @@ import (
 	"time"
 
 	"github.com/panicpanicpanic/chronos/cycle"
+	"github.com/panicpanicpanic/chronos/storage"
 )
 
 func main() {
+	// Create CSV if doesn't already exist
+	f, err := storage.WriteCSV()
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	var cycleLoop func()
+	// Kickoff cycle
 	cycleLoop = func() {
 		var err error
 
@@ -25,7 +33,7 @@ func main() {
 
 		cycle.EndTime = time.Now()
 
-		err = cycle.RecapCurrentCycle()
+		err = cycle.RecapCurrentCycle(f)
 		if err != nil {
 			fmt.Println(err)
 		}
