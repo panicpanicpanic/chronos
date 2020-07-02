@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/panicpanicpanic/tomato/cycle"
 )
@@ -15,6 +16,14 @@ func main() {
 	}
 
 	err = cycle.StartTimer()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// This line will hit once the timer ends or quits
+	cycle.EndTime = time.Now()
+
+	err = cycle.RecapCurrentCycle()
 	if err != nil {
 		fmt.Println(err)
 	}

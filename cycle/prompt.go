@@ -95,7 +95,7 @@ var CycleMorale = Prompt{
 var CycleDuration = Prompt{
 	DropDown: &promptui.Select{
 		Label: "How long should this Cycle be (in minutes)?",
-		Items: []string{"15", "30", "45"},
+		Items: []string{"15m", "30m", "45m"},
 	},
 }
 

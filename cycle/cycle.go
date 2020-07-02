@@ -4,7 +4,6 @@ package cycle
 import (
 	"fmt"
 	"os"
-	"strconv"
 	"time"
 )
 
@@ -16,7 +15,7 @@ type Cycle struct {
 	Hazards       string
 	Energy        string
 	Morale        string
-	Duration      int64
+	Duration      time.Duration
 	StartTime     time.Time
 	EndTime       time.Time
 	Active        bool
@@ -78,7 +77,7 @@ func NewCycle() (Cycle, error) {
 		return c, err
 	}
 
-	c.Duration, err = strconv.ParseInt(duration, 10, 64)
+	c.Duration, err = time.ParseDuration(duration)
 	if err != nil {
 		return c, err
 	}
@@ -95,6 +94,12 @@ func NewCycle() (Cycle, error) {
 	}
 
 	return c, nil
+}
+
+// RecapCurrentCycle
+func (c Cycle) RecapCurrentCycle() error {
+
+	return nil
 }
 
 func (c Cycle) launchRecap() {
