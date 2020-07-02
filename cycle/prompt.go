@@ -106,3 +106,92 @@ var LaunchCycle = Prompt{
 		Items: []string{"Yes", "No"},
 	},
 }
+
+// LaunchRecap - Did you want to recap this cycle?
+var LaunchRecap = Prompt{
+	DropDown: &promptui.Select{
+		Label: "Did you want to recap this cycle?",
+		Items: []string{"Yes", "No"},
+	},
+}
+
+// CycleCompleted - Did you complete the cycle's target?
+var CycleCompleted = Prompt{
+	DropDown: &promptui.Select{
+		Label: "Did you complete the cycle's target?",
+		Items: []string{"Yes", "No"},
+	},
+}
+
+// CycleDistractions - Were there any distractions?
+var CycleDistractions = Prompt{
+	Question: &promptui.Prompt{
+		Label: "Were there any distractions?",
+		Validate: func(input string) error {
+			if input == "" {
+				return errors.New("cant be empty")
+			}
+			return nil
+		},
+	},
+}
+
+// CycleImprovements - Are there any improvements you would make?
+var CycleImprovements = Prompt{
+	Question: &promptui.Prompt{
+		Label: "Are there any improvements you would make?",
+		Validate: func(input string) error {
+			if input == "" {
+				return errors.New("cant be empty")
+			}
+			return nil
+		},
+	},
+}
+
+// ProjectDescription - Quick description of the project you're working on this cycle
+var ProjectDescription = Prompt{
+	Question: &promptui.Prompt{
+		Label: "Quick description of the project you're working on this cycle",
+		Validate: func(input string) error {
+			if input == "" {
+				return errors.New("cant be empty")
+			}
+			return nil
+		},
+	},
+}
+
+// ProjectJiraTicket - Any JIRA ticket/links you're going to focus on this cycle
+var ProjectJiraTicket = Prompt{
+	Question: &promptui.Prompt{
+		Label: "Any JIRA ticket/links you're going to focus on this cycle",
+		Validate: func(input string) error {
+			if input == "" {
+				return errors.New("cant be empty")
+			}
+			return nil
+		},
+	},
+}
+
+// ProjectGithubPR - Any Github PR/Issue you're going to focus on this cycle
+var ProjectGithubPR = Prompt{
+	Question: &promptui.Prompt{
+		Label: "Any Github PR/Issue you're going to focus on this cycle",
+		Validate: func(input string) error {
+			if input == "" {
+				return errors.New("cant be empty")
+			}
+			return nil
+		},
+	},
+}
+
+// EndCycle - Did you want to stop working?
+var EndCycle = Prompt{
+	DropDown: &promptui.Select{
+		Label: "Did you want to stop working?",
+		Items: []string{"Yes", "No"},
+	},
+}

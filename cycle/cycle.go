@@ -45,6 +45,7 @@ type Recap struct {
 // or returns an error
 func NewCycle() (Cycle, error) {
 	var c Cycle
+	var p Project
 	var err error
 
 	c.CycleGoal, err = CycleAccomplishments.Ask()
@@ -61,6 +62,23 @@ func NewCycle() (Cycle, error) {
 	if err != nil {
 		return c, err
 	}
+
+	p.Description, err = ProjectDescription.Ask()
+	if err != nil {
+		return c, err
+	}
+
+	p.JiraTicket, err = ProjectJiraTicket.Ask()
+	if err != nil {
+		return c, err
+	}
+
+	p.GithubPR, err = ProjectGithubPR.Ask()
+	if err != nil {
+		return c, err
+	}
+
+	c.Project = p
 
 	c.Energy, err = CycleEnergy.Ask()
 	if err != nil {
@@ -96,14 +114,62 @@ func NewCycle() (Cycle, error) {
 	return c, nil
 }
 
-// RecapCurrentCycle
+// RecapCurrentCycle launches a set of questions that aim to
+// recap a current Cycle
 func (c Cycle) RecapCurrentCycle() error {
+	var r Recap
+	var err error
+
+	launchRecap, err := LaunchRecap.Ask()
+	if err != nil {
+		return err
+	}
+	if launchRecap == "Yes" {
+		cycleCompleted, err := CycleCompleted.Ask()
+		if err != nil {
+			return err
+		}
+		if cycleCompleted == "Yes" {
+			r.CycleCompleted = true
+		} else {
+			r.CycleCompleted = false
+		}
+
+		r.Distractions, err = CycleDistractions.Ask()
+		if err != nil {
+			return err
+		}
+
+		r.Improvements, err = CycleImprovements.Ask()
+		if err != nil {
+			return err
+		}
+
+		c.Recap = r
+	} else {
+		fmt.Println("Writing cycle to CSV")
+		fmt.Println("Okay...going to leave now!")
+		os.Exit(1)
+	}
 
 	return nil
 }
 
+// EndCycle asks the user if they want to stop working
+func (c Cycle) EndCycle() (bool, error) {
+	ec, err := EndCycle.Ask()
+	if err != nil {
+		fmt.Println(err)
+	}
+	if ec == "Yes" {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 func (c Cycle) launchRecap() {
 	fmt.Println("Awesome! Here's a breakdown of this cycle:")
-	fmt.Printf("Goal:%s \n", c.CycleGoal)
-	fmt.Printf("Starting Point:%s \n", c.StartingPoint)
+	fmt.Printf("Goal: %s \n", c.CycleGoal)
+	fmt.Printf("Starting Point: %s \n", c.StartingPoint)
 }
